@@ -1,1 +1,3 @@
-# background-jobs-practices
+# Setup 
+## Minio 
+1. Create buckage: `email-storage`
