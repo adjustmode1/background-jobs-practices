@@ -5,11 +5,17 @@
   "author": "",
   "private": true,
   "license": "UNLICENSED",
+  "compilerOptions": {
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext"
+  },
   "scripts": {
     "build": "nest build",
     "format": "prettier --write \"apps/**/*.ts\" \"libs/**/*.ts\"",
     "start": "nest start",
     "start:dev": "nest start --watch",
+    "start-filestore": "nest start filestore",
+    "start-filestore:dev": "nest start filestore --watch",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/apps/background/main",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
@@ -20,13 +26,24 @@
     "test:e2e": "jest --config ./apps/background/test/jest-e2e.json"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.958.0",
+    "@aws-sdk/s3-request-presigner": "^3.958.0",
+    "@grpc/grpc-js": "^1.14.3",
+    "@grpc/proto-loader": "^0.8.0",
     "@nestjs/common": "^11.0.1",
     "@nestjs/config": "^4.0.2",
     "@nestjs/core": "^11.0.1",
+    "@nestjs/microservices": "^11.1.10",
     "@nestjs/platform-express": "^11.0.1",
+    "@nestjs/swagger": "^11.2.3",
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.14.3",
+    "grpc": "^1.24.11",
     "js-yaml": "^4.1.1",
+    "nanoid": "^5.1.6",
     "reflect-metadata": "^0.2.2",
-    "rxjs": "^7.8.1"
+    "rxjs": "^7.8.1",
+    "zod": "^4.2.1"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.2.0",

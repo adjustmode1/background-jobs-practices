@@ -17,11 +17,22 @@ rabbitmq:
   password: admin123
 
 minio:
-  endpoint: localhost
-  port: 9000
+  endpoint: 'localhost:9000'
+  region: 'us-east-1'
+  useSSL: false
   accessKey: minioadmin
   secretKey: minioadmin123
 
+storageSetting:
+  maxChunks: 1000
+  maxChunkSize: 10000000 # 10MB
+  maxInitChunks: 5
+
+
+storage:
+  bucket: 'email-storage'
+  tempBucket: 'email-storage-temp'
+
 swagger:
-  enabled: true
+  enable: true
   path: /swagger

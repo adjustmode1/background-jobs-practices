@@ -30,7 +30,15 @@ services:
     environment:
       MINIO_ROOT_USER: minioadmin
       MINIO_ROOT_PASSWORD: minioadmin123
-
+      # RabbitMQ config
+      MINIO_NOTIFY_AMQP_ENABLE: "on"
+      MINIO_NOTIFY_AMQP_URL: "amqp://admin:admin123@rabbitmq:5672"
+      MINIO_NOTIFY_AMQP_EXCHANGE: "minio-events"
+      MINIO_NOTIFY_AMQP_EXCHANGE_TYPE: "topic"
+      MINIO_NOTIFY_AMQP_ROUTING_KEY: "s3.events"
+      MINIO_NOTIFY_AMQP_DELIVERY_MODE: "2" # persistent
+    depends_on:
+      - rabbitmq
     volumes:
       - ./data/minio_data:/data
 
