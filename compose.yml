@@ -54,3 +54,16 @@ services:
       POSTGRES_PASSWORD: app_pass123
     volumes:
       - ./data/postgres_data:/var/lib/postgresql/data
+
+  redis:
+    image: redis:7.2-alpine
+    container_name: redis_server
+    restart: always
+    ports:
+      - "6379:6379"
+    environment:
+      - MY_REDIS_USER=admin
+      - MY_REDIS_PASS=admin123
+    volumes:
+      - ./data/redis:/data
+    command: redis-server --save 60 1 --appendonly yes

@@ -4,20 +4,23 @@ import {
   S3Client,
   ListPartsCommand,
   CompleteMultipartUploadCommand,
+  UploadPartCommand,
+  CreateMultipartUploadCommand,
 } from '@aws-sdk/client-s3';
 import { AppConfigService } from '../config/App.config.service';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
+import type { CreateMultipartUploadOutput } from '@aws-sdk/client-s3/dist-types/models/models_0';
 
 @Injectable()
 export class MinioService implements OnModuleInit {
   private readonly logger = new Logger(MinioService.name);
   private client!: S3Client;
   private bucket: string;
-  private bucketTemp: string;
+  private tempBucket: string;
 
   constructor(private readonly appConfig: AppConfigService) {
     this.bucket = appConfig.storage().bucket;
-    this.bucketTemp = appConfig.storage().bucketTemp;
+    this.tempBucket = appConfig.storage().tempBucket;
   }
 
   onModuleInit() {
@@ -33,22 +36,56 @@ export class MinioService implements OnModuleInit {
     });
   }
 
-  getPresignedURL(objectName: string): Promise<string> {
-    return getSignedUrl(
-      this.client,
-      new PutObjectCommand({
-        Bucket: this.bucketTemp,
+  createMultiPartUpload(
+    objectName: string,
+  ): Promise<CreateMultipartUploadOutput> {
+    this.logger.verbose('.createMultiPartUpload', {
+      bucket: this.tempBucket,
+      objectName,
+    });
+    return this.client.send(
+      new CreateMultipartUploadCommand({
+        Bucket: this.tempBucket,
         Key: objectName,
       }),
     );
   }
 
-  completeUploadParts(uploadId: string, objectName: string) {
+  getPresignedURL(objectName: string): Promise<string> {
+    return getSignedUrl(
+      this.client,
+      new PutObjectCommand({
+        Bucket: this.tempBucket,
+        Key: objectName,
+      }),
+    );
+  }
+
+  getMultipartPresignedURL(
+    uploadId: string,
+    objectName: string,
+    partNumber: number,
+  ): Promise<string> {
+    return getSignedUrl(
+      this.client,
+      new UploadPartCommand({
+        UploadId: uploadId,
+        Bucket: this.tempBucket,
+        Key: objectName,
+        PartNumber: partNumber,
+      }),
+    );
+  }
+
+  completeUploadParts(uploadId: string, objectName: string, parts: Array<any>) {
     return this.client.send(
       new CompleteMultipartUploadCommand({
-        Bucket: this.bucketTemp,
+        Bucket: this.tempBucket,
         Key: objectName,
         UploadId: uploadId,
+        MultipartUpload: {
+          Parts: parts,
+        },
       }),
     );
   }
@@ -56,7 +93,7 @@ export class MinioService implements OnModuleInit {
   listUploadedParts(uploadId: string, objectName: string) {
     return this.client.send(
       new ListPartsCommand({
-        Bucket: this.bucketTemp,
+        Bucket: this.tempBucket,
         UploadId: uploadId,
         Key: objectName,
       }),

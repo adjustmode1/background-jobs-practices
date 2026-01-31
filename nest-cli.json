@@ -28,13 +28,13 @@
         "tsConfigPath": "apps/filestore/tsconfig.app.json"
       }
     },
-    "grpc-gateway": {
+    "filestore-worker": {
       "type": "application",
-      "root": "apps/grpc-gateway",
+      "root": "apps/filestore-worker",
       "entryFile": "main",
-      "sourceRoot": "apps/grpc-gateway/src",
+      "sourceRoot": "apps/filestore-worker/src",
       "compilerOptions": {
-        "tsConfigPath": "apps/grpc-gateway/tsconfig.app.json"
+        "tsConfigPath": "apps/filestore-worker/tsconfig.app.json"
       }
     }
   }

@@ -33,20 +33,10 @@ export const StorageSchema = z.object({
   tempBucket: z.string(),
 });
 
-export const SwaggerSchema = z.object({
-  enable: z.boolean(),
-  path: z.string(),
-});
-
 export const StorageSettingSchema = z.object({
   maxChunks: z.number(),
   maxChunkSize: z.number(),
   maxInitChunk: z.number(),
-});
-
-export const RedisSettingSchema = z.object({
-  host: z.string(),
-  port: z.number(),
 });
 
 export const GlobalConfigSchema = z.object({
@@ -55,9 +45,7 @@ export const GlobalConfigSchema = z.object({
   rabbitmq: RabbitMQSchema,
   minio: MinioSchema,
   storage: StorageSchema,
-  swagger: SwaggerSchema,
   storageSetting: StorageSettingSchema,
-  redis: RedisSettingSchema,
 });
 
 export type AppConfig = z.infer<typeof GlobalConfigSchema>;

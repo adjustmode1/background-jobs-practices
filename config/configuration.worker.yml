@@ -1,8 +1,3 @@
-app:
-  port: 3000
-  name: Filestore
-  environment: development
-
 database:
   host: localhost
   port: 5432
@@ -31,11 +26,3 @@ storageSetting:
 storage:
   bucket: 'email-storage'
   tempBucket: 'email-storage-temp'
-
-swagger:
-  enable: true
-  path: /swagger
-
-redis:
-  host: '127.0.0.1'
-  port: 6379

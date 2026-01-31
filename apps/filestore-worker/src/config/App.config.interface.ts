@@ -1,8 +1,3 @@
-export interface AppConfigInterface {
-  port: number;
-  name: string;
-}
-
 export interface DatabaseConfigInterface {
   host: string;
   port: number;
@@ -31,18 +26,8 @@ export interface StorageConfigInterface {
   tempBucket: string;
 }
 
-export interface SwaggerConfigInterface {
-  enable: boolean;
-  path: string;
-}
-
 export interface storageSettingsInterface {
   maxChunks: number;
   maxChunkSize: number;
   maxInitChunk: number;
-}
-
-export interface redisSettingInterface {
-  host: string;
-  port: number;
 }

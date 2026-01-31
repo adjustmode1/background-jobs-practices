@@ -1,14 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import {
-  AppConfigInterface,
   DatabaseConfigInterface,
   MinioConfigInterface,
   RabbitMQConfigInterface,
-  redisSettingInterface,
   StorageConfigInterface,
   storageSettingsInterface,
-  SwaggerConfigInterface,
 } from './App.config.interface';
 
 @Injectable()
@@ -21,10 +18,6 @@ export class AppConfigService {
 
   getOrThrow<k>(key: string): unknown {
     return this.configService.getOrThrow<k>(key);
-  }
-
-  app(): AppConfigInterface {
-    return this.configService.getOrThrow<AppConfigInterface>('app');
   }
 
   database(): DatabaseConfigInterface {
@@ -47,13 +40,5 @@ export class AppConfigService {
     return this.configService.getOrThrow<storageSettingsInterface>(
       'storageSetting',
     );
-  }
-
-  swagger(): SwaggerConfigInterface {
-    return this.configService.getOrThrow<SwaggerConfigInterface>('swagger');
-  }
-
-  redisSetting(): redisSettingInterface {
-    return this.configService.getOrThrow<redisSettingInterface>('redis');
   }
 }

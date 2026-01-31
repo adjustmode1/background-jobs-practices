@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Logger, Param, Post } from '@nestjs/common';
 import { FilestoreService } from './filestore.service';
 import { InitUploadDto } from './dto/init-upload.dto';
 import { UserHeaderDto } from './dto/user-header.dto';
@@ -10,6 +10,7 @@ import { ListPartsDto } from './dto/list-parts.dto';
 
 @Controller('upload')
 export class FilestoreController {
+  private readonly logger = new Logger(FilestoreController.name);
   constructor(private readonly filestoreService: FilestoreService) {}
 
   @Post('init')
@@ -17,6 +18,7 @@ export class FilestoreController {
     @RequestHeader(UserHeaderDto) headers: UserHeaderDto,
     @Body() data: InitUploadDto,
   ): Promise<BaseRo<InitUploadRo>> {
+    this.logger.verbose('.initUpload');
     const result = await this.filestoreService.initUpload(
       headers['x-user-id'],
       data.fileSize,
@@ -35,11 +37,7 @@ export class FilestoreController {
     @RequestHeader(UserHeaderDto) headers: UserHeaderDto,
     @Body() data: CompleteUploadDto,
   ): Promise<BaseRo<InitUploadRo>> {
-    const result = await this.filestoreService.completeMultipartUpload(
-      headers['x-user-id'],
-      data.uploadId,
-      data.name,
-    );
+    const result = await this.filestoreService.completeUpload(data.fileId);
 
     return {
       message: 'Upload completed',
@@ -49,17 +47,17 @@ export class FilestoreController {
   // Resume multipart upload
 
   // List uploaded
-  @Get('list-parts/:uploadId')
+  @Get('list-parts/:fileId')
   async listParts(
     @RequestHeader(UserHeaderDto) headers: UserHeaderDto,
     @Param() params: ListPartsDto,
   ): Promise<BaseRo<InitUploadRo>> {
-    const result = await this.filestoreService.listParts(
-      params.uploadId,
-    );
+    this.logger.verbose('.listParts', { fileId: params.fileId });
+
+    const result = await this.filestoreService.listParts(params.fileId);
 
     return {
-      data: result,
+      // data: result,
       message: 'Init completed',
     };
   }
